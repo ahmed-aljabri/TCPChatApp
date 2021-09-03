@@ -33,7 +33,7 @@ func main() {
 		return
 	}
 
-	// -- RECIEVE LIST OF COMMAND
+	// -- Recieve list of commands
 	message, _ := bufio.NewReader(c).ReadString(',')
 	fmt.Print("[SERVER]->: " + message)
 

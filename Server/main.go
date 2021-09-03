@@ -21,6 +21,7 @@ import (
 
 func main() {
 
+	// -- Server instance initialized
 	s := newServer()
 
 	arguments := os.Args
@@ -29,6 +30,7 @@ func main() {
 		return
 	}
 
+	// -- Creating listener
 	PORT := ":" + arguments[1]
 	l, err := net.Listen("tcp4", PORT)
 	if err != nil {
@@ -37,12 +39,15 @@ func main() {
 	}
 	defer l.Close()
 
+	// -- Listening for client connections
 	for {
 		c, err := l.Accept()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+
+		// - Dedicated client threads created and passed to the server for processing
 		go s.handleConnection(c)
 
 	}

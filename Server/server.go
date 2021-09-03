@@ -19,13 +19,13 @@ import (
 	"strings"
 )
 
-//Server stores rooms [name,] & a channel where all comments will be sent through
+// -- Server struct stores a map of rooms
 
 type server struct {
 	rooms map[string]*room
 }
 
-//Initializing new Server
+// -- Initializing new Server
 func newServer() *server {
 	return &server{
 		rooms: make(map[string]*room),
@@ -33,7 +33,7 @@ func newServer() *server {
 }
 
 func (s *server) handleConnection(conn net.Conn) {
-	// -- ACK New Client
+
 	log.Printf("--[SERVER]: new client has joined: %s", conn.RemoteAddr().String())
 
 	// -- Create client instance
@@ -86,7 +86,7 @@ func (s *server) handleConnection(conn net.Conn) {
 		}
 
 	}
-	// conn.Close()
+
 }
 
 func (s *server) setName(c *client, args []string) {
