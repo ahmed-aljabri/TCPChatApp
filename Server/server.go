@@ -1,5 +1,16 @@
 package main
 
+/*
+	- Server.go
+	- This segment of the app is responsible for:
+	  1- defining the structure of the server
+	  2- outlining the ways in which client connections will be handeled.
+	  3- outlining how each command from the client will be processed.
+
+	  By: ahmed-alajbri
+
+*/
+
 import (
 	"bufio"
 	"fmt"

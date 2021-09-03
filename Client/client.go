@@ -1,5 +1,13 @@
 package main
 
+/*
+	- Client.go
+	- This is a independant program that is responsible for initiating a TCP connection to the server
+	  and runnung dedicated threads for both the Input and Output streams.
+
+	  By: ahmed-alajbri
+
+*/
 import (
 	"bufio"
 	"fmt"
@@ -25,14 +33,13 @@ func main() {
 		return
 	}
 
-	//defer c.Close()
-
-	// -- RECIEVE ACK OF CONNECTION & LIST OF COMMAND
+	// -- RECIEVE LIST OF COMMAND
 	message, _ := bufio.NewReader(c).ReadString(',')
 	fmt.Print("[SERVER]->: " + message)
 
 	wg.Add(2)
-	// -- Incoming Stream Thread
+
+	// -- Dedicated thread to the Input Stream
 	go func(c net.Conn) {
 
 		for {
@@ -46,7 +53,7 @@ func main() {
 		wg.Done()
 	}(c)
 
-	// -- Outgowing Stream Thread
+	// -- Dedicated thread to the Input Stream
 	go func(c net.Conn) {
 		for {
 			reader := bufio.NewReader(os.Stdin)

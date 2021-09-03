@@ -1,5 +1,11 @@
 package main
 
+/*
+	- client.go
+	- This segment defines the client type and defines a couple of methods.
+
+*/
+
 import (
 	"net"
 )

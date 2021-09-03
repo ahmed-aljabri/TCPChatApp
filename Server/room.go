@@ -1,5 +1,12 @@
 package main
 
+/*
+	- room.go
+	- This segment of the app defines the structue of the chat room and the broadcats method.
+
+	  By: ahmed-alajbri
+
+*/
 import (
 	"net"
 )
