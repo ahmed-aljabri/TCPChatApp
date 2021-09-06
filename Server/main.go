@@ -11,11 +11,18 @@ package main
 
 	  By: ahmed-alajbri
 
+	*TLS Option:
+	 	-- NOTE: for TLS to work the parameters to the LoadX509KeyPair function need to be replaced with the appropriate path of the key pair
+	*Raw TCP Option:
+	 	-- uncommment lines: 50
+	 	-- comment lines: 36 -> 40 and 51
+
 */
 
 import (
+	"crypto/tls"
 	"fmt"
-	"net"
+	"log"
 	"os"
 )
 
@@ -23,6 +30,14 @@ func main() {
 
 	// -- Server instance initialized
 	s := newServer()
+
+	// -- Loading KeyPair cert & key files
+
+	cert, err := tls.LoadX509KeyPair("path-to-certificate-pem-file", "path-to-server's-key-pem-file")
+	if err != nil {
+		log.Fatal(err)
+	}
+	config := &tls.Config{Certificates: []tls.Certificate{cert}}
 
 	arguments := os.Args
 	if len(arguments) == 1 {
@@ -32,7 +47,8 @@ func main() {
 
 	// -- Creating listener
 	PORT := ":" + arguments[1]
-	l, err := net.Listen("tcp4", PORT)
+	// l, err := net.Listen("tcp4", PORT) // -- Raw TCP option
+	l, err := tls.Listen("tcp4", PORT, config) // -- TLS option
 	if err != nil {
 		fmt.Println(err)
 		return

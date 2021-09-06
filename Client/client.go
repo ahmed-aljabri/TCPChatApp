@@ -7,9 +7,19 @@ package main
 
 	  By: ahmed-alajbri
 
+	  *Enabling TLS:
+	  	-- Change the middle parameter to flag.String() on line 30 to the appropriate path of the cert
+	*Raw TCP Option:
+		-- comment lines: 34 -> 45 and 54
+		-- uncomment lines: 55
+		 NOTE: Make sure server and client operate on the same option (Raw-TCP/TLS)
+
 */
 import (
 	"bufio"
+	"crypto/tls"
+	"crypto/x509"
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -20,6 +30,20 @@ import (
 var wg = sync.WaitGroup{}
 
 func main() {
+
+	certFile := flag.String("certfile", "/Path-to-CA-Certificate", "trusted CA certificate")
+	flag.Parse()
+
+	cert, err := os.ReadFile(*certFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	certPool := x509.NewCertPool()
+	if ok := certPool.AppendCertsFromPEM(cert); !ok {
+		log.Fatalf("unable to parse cert from %s", cert)
+	}
+	config := &tls.Config{RootCAs: certPool}
+
 	arguments := os.Args
 	if len(arguments) == 1 {
 		fmt.Println("Please provide host:port.")
@@ -27,7 +51,8 @@ func main() {
 	}
 
 	CONNECT := arguments[1]
-	c, err := net.Dial("tcp", CONNECT)
+	c, err := tls.Dial("tcp", CONNECT, config)
+	// c, err := net.Dial("tcp", CONNECT)
 	if err != nil {
 		fmt.Println(err)
 		return
